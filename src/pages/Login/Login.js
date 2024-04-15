@@ -4,9 +4,9 @@ function Login(){
     return(
         <div className="wrapper fadeInDown">
             <div id="formContent">                
-                <div className="fadeIn first">
-                    <img src="https://www.b-cube.in/wp-content/uploads/2014/05/aditya-300x177.jpg" id="icon" alt="User Icon" />
-                    <h1>Aditya News</h1>
+                <div className="fadeIn first mt-2 p-4">
+                    <img src="/Lock_icon.png" id="icon" alt="User Icon" />
+                    <h1 className='mt-5'>Giriş Yap</h1>
                 </div>
 
                 <form>
@@ -16,7 +16,7 @@ function Login(){
                 </form>
                
                 <div id="formFooter">
-                    <a className="underlineHover" href="#">Go to the Site</a>
+                    <a className="underlineHover" href="/register">Go to the Register</a>
                 </div>
 
             </div>
