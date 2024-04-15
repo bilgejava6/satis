@@ -1,32 +1,14 @@
-import { useState } from 'react';
+import React,{ useState } from 'react';
 import './Login.css';
-import userController from '../../config/UserController';
 import { useDispatch } from 'react-redux';
+import { fetchLogin } from '../../store/features/personelSlice';
+
 function Login(){
+    const dispatch = useDispatch();   
     const [username,setUsername] = useState('');
     const [password,setPassword] = useState('');
     const login = ()=>{
-      
-        fetch(userController.login,{
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',  // text, multipart/form-data           
-            },
-            body: JSON.stringify({
-                username, // -> K,V 'username': username DİKKAT!!! Eğer Key ve Value aynı değişken ile ifade ediliyor ise
-                // ayrı ayrı yazmanıza gerek yoktur.
-                password // password: password
-            })
-        }).then(data=> data.json())
-        .then(data=>{
-            if(data.code===200 || data.status===200)
-                console.log(data);
-            else
-                alert('Hata...'+ data.message);
-        })
-        .catch(error=>{           
-            console.log(error);
-        });
+        dispatch(fetchLogin({username,password}));
     }
     return(
         <div className="wrapper fadeInDown">

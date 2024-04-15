@@ -2,8 +2,11 @@ import {createAsyncThunk,createSlice} from '@reduxjs/toolkit';
 import userController from '../../config/UserController';
 const personelInitialState={
     token: '',
-    isLogin: false
+    isLogin: false,
+    isLoadingFetchLogin: false,
+    isLoadingFetchRegister: false
 };
+
 
 /**
  * Burada 2 farklı işlemimiz olacak
@@ -27,7 +30,7 @@ const personelInitialState={
  * diğer kodların çalışmasına izin verirler. Ancak eğer bu işlemin neticesi beklenecek ise
  * o zaman asenkron işlemin bitişinin bekletilebilmesi için method önüne "await" eklenir.
  */
-const fetchLogin = createAsyncThunk(
+export const fetchLogin = createAsyncThunk(
     'personel/fetchLogin',
     async (payload)=>{
         try {
@@ -38,7 +41,7 @@ const fetchLogin = createAsyncThunk(
                 },
                 body: JSON.stringify(payload)
             }).then(data=>data.json())
-              .then(data=> data);
+              .then(data=> data);           
             return result;
         } catch (error) {
             console.log('ERROR: personel/fetchLogin...: ', error);
@@ -47,7 +50,7 @@ const fetchLogin = createAsyncThunk(
     }
 );
 
-const fetchRegister = createAsyncThunk(
+export const fetchRegister = createAsyncThunk(
     'personel/fetchRegister',
     async (payload)=>{
         try {
@@ -63,3 +66,49 @@ const fetchRegister = createAsyncThunk(
 
     }
 );
+
+const personelSlice = createSlice({
+    name: 'personel',
+    initialState: personelInitialState,
+    /**
+     * default değerleri almak ve yönetmek için kullanıyoruz. Çünkü slice içinde
+     * bu değerleri sunucudan gelen değereler ile setlememiz gerekiyor. Bu işlemleri
+     * yapmak için kullanıyoruz.
+     */
+    reducers: {},
+    extraReducers:(build)=>{
+            /**
+             * Bir sunucu request işlemi 3 aşamada takip edilir. 
+             * 1- işlemin başladığı an, 
+             * 2- işlemin başarı ile tamamlandığı an,
+             * 3- işlemin başarısız olduğu an 
+             * bunları hepsi için burada bir aksiyon yazmamız gerekecektir. 
+             * Mesela işlem başladığında bunu belirten bir loading ikonu çıkartmak
+             * işlem bittiğinde bunu kpatmak gibi işlemler burada yapılır. Sunucudan
+             * gelen veriler state ler içine aktarılır ya da bir hata olduğunda hata 
+             * kullanıcıya iletilir.
+             */
+            build.addCase(fetchLogin.pending,(state)=>{
+                state.isLoadingFetchLogin = true;
+            }); // işlemin devam ettiği an
+            build.addCase(fetchLogin.fulfilled,(state,action)=>{
+                state.isLoadingFetchLogin = false;
+                console.log('Login fulfill....: ',action.payload);
+            }); // işlem tamamlandı
+            build.addCase(fetchLogin.rejected,(state)=>{
+                state.isLoadingFetchLogin=false;
+            }); // işlem iptal oldu
+            build.addCase(fetchRegister.pending,(state)=>{
+                state.isLoadingFetchRegister= true;
+            });
+            build.addCase(fetchRegister.fulfilled,(state,action)=>{
+                state.isLoadingFetchRegister = false;
+                console.log(action.payload);
+            });
+            build.addCase(fetchRegister.rejected,(state)=>{
+                state.isLoadingFetchRegister = false;
+            });
+    }
+});
+
+export default personelSlice.reducer;
