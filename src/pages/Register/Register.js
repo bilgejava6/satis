@@ -23,8 +23,8 @@ function Register(){
                 'password': password
             })
         }).then(data=> data.json())
-        .then(data=>{
-            console.log(data);
+        .then(ahmetAmcaNasilsin=>{
+            console.log(ahmetAmcaNasilsin);
         })
     }
 
