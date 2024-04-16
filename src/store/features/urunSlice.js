@@ -48,9 +48,9 @@ const urunSlice = createSlice({
         build.addCase(fetchUrunEkleme.pending,(state)=>{state.isLoadingAdd=true;});
         build.addCase(fetchUrunEkleme.fulfilled,(state,action)=>{
             state.isLoadingAdd=false;
-            if(action.payload.data){
-                alert("Ürün Başarı ile eklendi.");
-            }
+          //  if(action.payload.data){
+          //      alert("Ürün Başarı ile eklendi.");
+          //  }
         });
         build.addCase(fetchUrunEkleme.rejected,(state)=>{state.isLoadingAdd=false;});
          

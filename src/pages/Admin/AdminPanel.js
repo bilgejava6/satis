@@ -1,9 +1,12 @@
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import UserProfile from "../../components/UserProfile";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { fetchUrunEkleme, fetchUrunListele } from "../../store/features/urunSlice";
 
 function AdminPanel(){
-    const userProfileData = useSelector(state=> state.personel.data);    
+    const dispatch = useDispatch();
+    const userProfileData = useSelector(state=> state.personel.data);   
+    const urunListesi = useSelector(state=> state.urun.urunList); 
     const [urun,setUrun] = useState({
         ad: '',
         aciklama: '',
@@ -11,9 +14,15 @@ function AdminPanel(){
         resim:''
     });
     const urunEkle = ()=>{
-
+        dispatch(fetchUrunEkleme(urun)).then(()=>{
+            dispatch(fetchUrunListele());
+        });
     };
-    
+
+    useEffect(()=>{
+        dispatch(fetchUrunListele());
+    },[dispatch]);
+
     return(
         <div className="container">
             <div className="row mt-5 p-3 border border-primary">
@@ -30,22 +39,35 @@ function AdminPanel(){
                         <div className="row">
                             <div className="mb-3">
                                 <label className="form-label" style={{display:'block'}}>Ürün Adı</label>
-                                <input type="text" className="form-control" placeholder="ürün adı" />
+                                <input type="text" className="form-control" placeholder="ürün adı" 
+                                    onChange={(evt)=>{
+                                      setUrun({
+                                        ...urun,                                       
+                                        ad: evt.target.value,                                       
+                                      });
+                                    }}
+                                />
                             </div>
                             <div className="mb-3">
                                 <label className="form-label" style={{display:'block'}}>fiyat</label>
-                                <input type="text" className="form-control" placeholder="00.00₺" />
+                                <input type="text" className="form-control" placeholder="00.00₺" 
+                                    onChange={(evt)=> setUrun({...urun,fiyat:evt.target.value})}
+                                />
                             </div>
                             <div className="mb-3">
                                 <label className="form-label" style={{display:'block'}}>Açıklama</label>
-                                <input type="text" className="form-control" placeholder="ürün açıklaması" />
+                                <input type="text" className="form-control" placeholder="ürün açıklaması" 
+                                    onChange={(evt)=>setUrun({...urun,aciklama:evt.target.value})}
+                                />
                             </div>
                             <div className="mb-3">
                                 <label className="form-label" style={{display:'block'}}>Resim URL</label>
-                                <input type="text" className="form-control" placeholder="http://domain.com/urun.png" />
+                                <input type="text" className="form-control" placeholder="http://domain.com/urun.png" 
+                                    onChange={(evt)=>setUrun({...urun,resim:evt.target.value})}
+                                />
                             </div>
                             <div className="mb-3">
-                                <button type="button" className="btn btn-success" style={{display:'block', width: '100%'}}>Ürün Ekle</button>
+                                <button onClick={urunEkle} type="button" className="btn btn-success" style={{display:'block', width: '100%'}}>Ürün Ekle</button>
                             </div>
                             
                         </div>
@@ -62,42 +84,23 @@ function AdminPanel(){
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Ekran Kartı Asus</td>
-                                        <td>25.000 ₺</td>
-                                        <td>RTX4090</td>
-                                        <td>
-                                            <img src="https://picsum.photos/50/50" alt="" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Ekran Kartı Asus</td>
-                                        <td>25.000 ₺</td>
-                                        <td>RTX4090</td>
-                                        <td>
-                                            <img src="https://picsum.photos/50/50" alt="" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Ekran Kartı Asus</td>
-                                        <td>25.000 ₺</td>
-                                        <td>RTX4090</td>
-                                        <td>
-                                            <img src="https://picsum.photos/50/50" alt="" />
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td>Ekran Kartı Asus</td>
-                                        <td>25.000 ₺</td>
-                                        <td>RTX4090</td>
-                                        <td>
-                                            <img src="https://picsum.photos/50/50" alt="" />
-                                        </td>
-                                    </tr>
+                                    {
+                                        urunListesi.map((data,index)=>{
+                                            return(
+                                                <tr key={index}>
+                                                    <th scope="row">{data.id}</th>
+                                                    <td>{data.ad}</td>
+                                                    <td>{data.fiyat} ₺</td>
+                                                    <td>{data.aciklama}</td>
+                                                    <td>
+                                                        <img src={data.resim} alt="" width={50} height={50}/>
+                                                    </td>
+                                                </tr>
+                                            )
+                                        })
+                                    }
+                                    
+                                   
                                     
                                 </tbody>
                             </table>
