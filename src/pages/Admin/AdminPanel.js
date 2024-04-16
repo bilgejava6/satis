@@ -7,6 +7,7 @@ function AdminPanel(){
     const dispatch = useDispatch();
     const userProfileData = useSelector(state=> state.personel.data);   
     const urunListesi = useSelector(state=> state.urun.urunList); 
+    const menuListesi = useSelector(state=> state.menu.menuList);
     const [urun,setUrun] = useState({
         ad: '',
         aciklama: '',
@@ -35,7 +36,16 @@ function AdminPanel(){
                 </div>                    
             </div>
             <div className="row mt-1 p-3 border border-success">
-                <div className="col">
+                <div className="col-3 ">
+                    <ul class="list-group">
+                        <li class="list-group-item active" aria-current="true">An active item</li>
+                        <li class="list-group-item">A second item</li>
+                        <li class="list-group-item">A third item</li>
+                        <li class="list-group-item">A fourth item</li>
+                        <li class="list-group-item">And a fifth one</li>
+                    </ul>
+                </div>
+                <div className="col-9">
                         <div className="row">
                             <div className="mb-3">
                                 <label className="form-label" style={{display:'block'}}>Ürün Adı</label>

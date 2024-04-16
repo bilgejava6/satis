@@ -1,13 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 import {
     personelSlice,
-    urunSlice
+    urunSlice,
+    menuSlice
 } from './features';
 
 const store = configureStore({
     reducer: {
         personel: personelSlice,
-        urun: urunSlice
+        urun: urunSlice,
+        menu: menuSlice
     }
 });
 
