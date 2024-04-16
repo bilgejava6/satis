@@ -2,13 +2,18 @@ import React,{ useState } from 'react';
 import './Login.css';
 import { useDispatch } from 'react-redux';
 import { fetchLogin } from '../../store/features/personelSlice';
+import { useNavigate } from 'react-router-dom';
 
 function Login(){
     const dispatch = useDispatch();   
+    const navigate = useNavigate();
     const [username,setUsername] = useState('');
     const [password,setPassword] = useState('');
     const login = ()=>{
-        dispatch(fetchLogin({username,password}));
+        dispatch(fetchLogin({username,password})).then((data)=>{            
+            if(data.payload.status===200)
+                navigate.call(null,'/admin-panel');
+        });
     }
     return(
         <div className="wrapper fadeInDown">

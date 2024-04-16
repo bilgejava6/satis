@@ -2,6 +2,7 @@ import {createAsyncThunk,createSlice} from '@reduxjs/toolkit';
 import userController from '../../config/UserController';
 const personelInitialState={
     token: '',
+    data: {},
     isLogin: false,
     isLoadingFetchLogin: false,
     isLoadingFetchRegister: false
@@ -93,7 +94,15 @@ const personelSlice = createSlice({
             }); // işlemin devam ettiği an
             build.addCase(fetchLogin.fulfilled,(state,action)=>{
                 state.isLoadingFetchLogin = false;
-                console.log('Login fulfill....: ',action.payload);
+                if(action.payload.status===null || action.payload.status!==200){
+                  alert('hata...:'+ action.payload.message);  
+                }else{   
+                    console.log("gelen data....: ", action.payload);               
+                    state.data = action.payload.data;
+                    state.isLogin = true;
+                   // sessionStorage.setItem("token", action.payload.data);
+                }
+               
             }); // işlem tamamlandı
             build.addCase(fetchLogin.rejected,(state)=>{
                 state.isLoadingFetchLogin=false;
