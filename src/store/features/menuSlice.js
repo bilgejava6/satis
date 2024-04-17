@@ -2,7 +2,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import menuUrl from "../../config/MenuController";
 const initMenuState = {
     menuList: [],
-    isLoading: false
+    isLoading: false,
+    activeMenuId: 0
 };
 
 export const fetchMenuEkle = createAsyncThunk(
@@ -30,7 +31,16 @@ export const fetchMenuListele = createAsyncThunk(
 const menuSlice = createSlice({
     name: 'menu',
     initialState: initMenuState,
-    reducers: {},
+    reducers: {
+        /**
+         * 
+         * @param {*} state -> burada yeralan tanımlı değerler
+         * @param {*} action -> dispatch edilirken iletilen değerler
+         */
+        setActiveMenuId(state,action){
+            state.activeMenuId = action.payload;
+        }
+    },
     extraReducers: (builder)=>{
         builder.addCase(fetchMenuEkle.pending,()=>{});
         builder.addCase(fetchMenuEkle.fulfilled,()=>{});
@@ -46,5 +56,5 @@ const menuSlice = createSlice({
         
     }
 });
-
+export const {setActiveMenuId} = menuSlice.actions;
 export default menuSlice.reducer;
