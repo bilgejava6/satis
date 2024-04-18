@@ -4,7 +4,8 @@ import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 const initUrunState={
     urunList: [],
     isLoadingAdd: false,
-    isLoadingGetAll: false
+    isLoadingGetAll: false,
+    sepetAdedi: 0
 };
 
 export const fetchUrunEkleme = createAsyncThunk(
@@ -43,7 +44,16 @@ export const fetchUrunListele = createAsyncThunk(
 const urunSlice = createSlice({
     name: 'urun',
     initialState: initUrunState,
-    reducers: {},
+    reducers: {
+        sepetAdediArttir(state,action){
+            if(state.sepetAdedi<3)
+                state.sepetAdedi = state.sepetAdedi + 1;
+        },
+        sepetAdediAzalt(state,action){
+            if(state.sepetAdedi>0)
+                state.sepetAdedi = state.sepetAdedi - 1;
+        }
+    },
     extraReducers: (build)=>{
         build.addCase(fetchUrunEkleme.pending,(state)=>{state.isLoadingAdd=true;});
         build.addCase(fetchUrunEkleme.fulfilled,(state,action)=>{
@@ -65,5 +75,7 @@ const urunSlice = createSlice({
         
     }
 });
+
+export const {sepetAdediArttir, sepetAdediAzalt} = urunSlice.actions;
 
 export default urunSlice.reducer;
