@@ -4,6 +4,7 @@ import Home from './pages/Home/Home';
 import Register from './pages/Register/Register';
 import Login from './pages/Login/Login';
 import {AdminPanel} from './pages/Admin';
+import Sepet from "./pages/Sepet/Sepet";
 
 
 function App() {
@@ -18,7 +19,9 @@ const isLogin  = useSelector(state => state.personel.isLogin);
           <Route path='/' element={<Home />}/>
           <Route path='/register' element={<Register />}/>
           <Route path='/login' element={<Login />}/>   
-          <Route path='/admin-panel' element={isLogin ? <AdminPanel /> : <Login />} />       
+          <Route path='/admin-panel' element={isLogin ? <AdminPanel /> : <Login />} />    
+          <Route path='/sepet' element={<Sepet />}/>   
+             
         </Routes>
     </BrowserRouter>
   );

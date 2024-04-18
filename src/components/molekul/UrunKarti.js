@@ -1,17 +1,17 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { sepetAdediArttir, sepetAdediAzalt } from "../../store/features/urunSlice";
+import { sepeteEkle, sepettenCikart } from "../../store/features/sepetSlice";
 
 function UrunKarti(props){
     const dispatch = useDispatch();
     const urun = props.urun;
     const [isActive, setIsActive] = useState(false);
-    const sepetAdedi = useSelector(state=> state.urun.sepetAdedi);
+    const sepetAdedi = useSelector(state=> state.sepet.sepetAdedi);
     const buttonClick = ()=>{
         if(isActive){ // sepetten çıkart
-            dispatch(sepetAdediAzalt());
+            dispatch(sepettenCikart(urun));
         }else{ // sepete ekle
-            dispatch(sepetAdediArttir());
+            dispatch(sepeteEkle(urun));    
         }
         setIsActive(!isActive);
     }
