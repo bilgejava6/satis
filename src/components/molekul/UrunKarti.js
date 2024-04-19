@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { sepeteEkle, sepettenCikart } from "../../store/features/sepetSlice";
+import { fetchSepeteEkle, sepeteEkle, sepettenCikart } from "../../store/features/sepetSlice";
 
 function UrunKarti(props){
     const dispatch = useDispatch();
@@ -11,7 +11,13 @@ function UrunKarti(props){
         if(isActive){ // sepetten çıkart
             dispatch(sepettenCikart(urun));
         }else{ // sepete ekle
-            dispatch(sepeteEkle(urun));    
+            dispatch(sepeteEkle(urun));
+            dispatch(fetchSepeteEkle({
+                userId: 1,
+                urunId: urun.id,
+                adet: 1,
+                fiyat: urun.fiyat
+            })); 
         }
         setIsActive(!isActive);
     }
